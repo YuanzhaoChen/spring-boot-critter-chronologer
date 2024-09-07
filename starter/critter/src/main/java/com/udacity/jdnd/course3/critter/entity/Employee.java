@@ -28,7 +28,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Set<DayOfWeek> daysAvailable = new HashSet<>();
 
-    @ManyToMany(mappedBy = "employeeList")
+    @ManyToMany(mappedBy = "employeeSet")
     private List<Schedule> scheduleList = new LinkedList<>();
 
     public long getId() {

@@ -31,7 +31,7 @@ public class Pet {
     @Type(type = "ntext")
     private String notes;
 
-    @ManyToMany(mappedBy = "petList")
+    @ManyToMany(mappedBy = "petSet")
     private List<Schedule> scheduleList = new LinkedList<>();
 
     public long getId() {

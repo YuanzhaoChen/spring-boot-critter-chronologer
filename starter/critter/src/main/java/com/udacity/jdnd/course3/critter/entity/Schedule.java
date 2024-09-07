@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.enums.EmployeeSkill;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class Schedule {
             joinColumns = { @JoinColumn(name = "schedule_id")},
             inverseJoinColumns = { @JoinColumn(name = "employee_id")}
     )
-    private List<Employee> employeeList = new LinkedList<>();
+    private Set<Employee> employeeSet = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -29,13 +30,13 @@ public class Schedule {
             joinColumns = { @JoinColumn(name = "schedule_id")},
             inverseJoinColumns = { @JoinColumn(name = "pet_id")}
     )
-    private List<Pet> petList = new LinkedList<>();
+    private Set<Pet> petSet = new HashSet<>();
 
     private LocalDate date;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
-    private Set<EmployeeSkill> activities;
+    private Set<EmployeeSkill> activities = new HashSet<>();
 
     public long getId() {
         return id;
@@ -45,20 +46,20 @@ public class Schedule {
         this.id = id;
     }
 
-    public List<Employee> getEmployeeList() {
-        return employeeList;
+    public Set<Employee> getEmployeeSet() {
+        return employeeSet;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
-        this.employeeList = employeeList;
+    public void setEmployeeSet(Set<Employee> employeeSet) {
+        this.employeeSet = employeeSet;
     }
 
-    public List<Pet> getPetList() {
-        return petList;
+    public Set<Pet> getPetSet() {
+        return petSet;
     }
 
-    public void setPetList(List<Pet> petList) {
-        this.petList = petList;
+    public void setPetSet(Set<Pet> petSet) {
+        this.petSet = petSet;
     }
 
     public LocalDate getDate() {
