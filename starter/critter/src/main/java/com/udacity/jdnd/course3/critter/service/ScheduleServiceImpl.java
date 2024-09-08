@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -21,6 +23,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public Schedule getSchedule(long id) {
@@ -34,38 +39,30 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<Schedule> getScheduleForPet(long petId) {
-        List<Schedule> scheduleInDB = scheduleRepository.findAll();
         List<Schedule> scheduleList = new LinkedList<>();
-        for (Schedule schedule : scheduleInDB) {
-            if (schedule.getPetSet().contains(petService.getPet(petId))) {
-                scheduleList.add(schedule);
-            }
+        Pet pet = petService.getPet(petId);
+        for (Schedule schedule : pet.getScheduleList()) {
+            scheduleList.add(schedule);
         }
         return scheduleList;
     }
 
     @Override
     public List<Schedule> getScheduleForEmployee(long employeeId) {
-        List<Schedule> scheduleInDB = scheduleRepository.findAll();
         List<Schedule> scheduleList = new LinkedList<>();
-        for (Schedule schedule : scheduleInDB) {
-            if (schedule.getEmployeeSet().contains(employeeService.getEmployee(employeeId))) {
-                scheduleList.add(schedule);
-            }
+        Employee employee = employeeService.getEmployee(employeeId);
+        for (Schedule schedule : employee.getScheduleList()) {
+            scheduleList.add(schedule);
         }
         return scheduleList;
     }
 
     @Override
     public List<Schedule> getScheduleForCustomer(long customerId) {
-        List<Schedule> scheduleInDB = scheduleRepository.findAll();
         List<Schedule> scheduleList = new LinkedList<>();
-        for (Schedule schedule : scheduleInDB) {
-            for (Pet pet : schedule.getPetSet()) {
-                if (pet.getOwner().getId()==customerId){
-                    scheduleList.add(schedule);
-                }
-            }
+        List<Pet> petList = customerService.getCustomer(customerId).getPetList();
+        for (Pet pet : petList) {
+            scheduleList = Stream.concat(scheduleList.stream(), getScheduleForPet(pet.getId()).stream()).collect(Collectors.toList());
         }
         return scheduleList;
     }
