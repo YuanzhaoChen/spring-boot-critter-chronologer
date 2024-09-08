@@ -57,6 +57,20 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public List<Schedule> getScheduleForCustomer(long customerId) {
+        List<Schedule> scheduleInDB = scheduleRepository.findAll();
+        List<Schedule> scheduleList = new LinkedList<>();
+        for (Schedule schedule : scheduleInDB) {
+            for (Pet pet : schedule.getPetSet()) {
+                if (pet.getOwner().getId()==customerId){
+                    scheduleList.add(schedule);
+                }
+            }
+        }
+        return scheduleList;
+    }
+
+    @Override
     @Transactional
     public Schedule saveSchedule(Schedule schedule) {
         Schedule scheduleInDB = scheduleRepository.save(schedule);

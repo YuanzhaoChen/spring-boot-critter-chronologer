@@ -13,5 +13,7 @@ public interface ScheduleService {
 
     List<Schedule> getScheduleForEmployee(long employeeId);
 
+    List<Schedule> getScheduleForCustomer(long customerId);
+
     Schedule saveSchedule(Schedule schedule);
 }
